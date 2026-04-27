@@ -1,71 +1,27 @@
 # UK Market Intelligence System
 
-Small production-style ML + LLM portfolio project focused on UK job market signals. The system will ingest UK job postings, store curated data in BigQuery, generate salary and demand benchmarks, lightly enrich company records with trust/reputation signals, and expose scored outputs through FastAPI.
+This is a small project I built to make job hunting a little less opaque.
 
-## Goals
+It looks at real UK job postings in data, analytics, and AI and tries to answer a simple question: is this job paying what it should?
 
-- Build a weekend-sized, explainable data product for applied data science interviews.
-- Show practical use of Python, SQL, pandas, scikit-learn, BigQuery, and FastAPI.
-- Keep the implementation simple, robust, and easy to discuss in interviews.
+Behind the scenes, it pulls job listings, builds a simple model to estimate what similar roles tend to pay, and then compares that to the salary being offered. On top of that, it rolls things up to the company level so you can see which companies tend to pay more or less, and how actively they are hiring.
 
-## Planned Scope
+There’s also a layer that lets you ask questions about the market. It pulls the most relevant companies and uses an LLM to explain what might be going on in plain English, based only on the data in the system.
 
-- Ingest sample UK job posting data from files or APIs.
-- Standardize fields needed for analytics and downstream scoring.
-- Store raw and modeled tables in BigQuery.
-- Create simple salary and demand benchmarks with transparent logic.
-- Add lightweight company trust/reputation enrichment.
-- Serve job and company signals through a FastAPI API.
+The goal isn’t to be perfect. It’s to give you a directional signal so you can decide which roles to focus on, which ones might be underpaying, and where you might have more leverage.
 
-## Tech Stack
+## What it’s doing under the hood
 
-- Python
-- pandas
-- scikit-learn
-- BigQuery
-- SQL
-- FastAPI
-- Docker
-- GitHub Actions
-- Optional LLM structured extraction
+Job postings come from the Adzuna API and are stored and shaped in BigQuery. A simple machine learning model estimates expected salary based on things like role, location, and other features derived from the posting. The app then compares that estimate to the listed salary.
 
-## Repository Structure
+Company ratings come from Google Places when they’re available. The explanation layer uses retrieval plus Claude so that answers are grounded in the actual companies pulled from the data.
 
-```text
-.
-|-- app/
-|-- src/
-|   |-- api/
-|   |-- enrichment/
-|   |-- features/
-|   |-- ingestion/
-|   `-- pipelines/
-|-- sql/
-|-- models/
-|   `-- artifacts/
-|-- data/
-|   |-- raw/
-|   `-- processed/
-`-- .github/
-    `-- workflows/
-```
+The app itself is built in Streamlit and is meant to feel lightweight and interactive.
 
-## Setup
+## Running it locally
 
-1. Create a virtual environment.
-2. Install dependencies from `requirements.txt`.
-3. Copy `.env.example` to `.env` and fill in required values.
-4. Authenticate to Google Cloud before running BigQuery-related steps.
+Install dependencies and run:
 
-## Development Plan
-
-1. Add a minimal ingestion pipeline for job posting source files.
-2. Create BigQuery table schemas and SQL transforms.
-3. Implement benchmark generation for salary and demand.
-4. Add lightweight company enrichment and scoring.
-5. Expose outputs with FastAPI.
-6. Add Docker and GitHub Actions for local/dev workflow.
-
-## Status
-
-Project scaffold created. Pipeline implementation is intentionally not started yet.
+```bash
+pip install -r requirements.txt
+streamlit run app/dashboard.py
