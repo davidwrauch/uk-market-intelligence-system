@@ -217,7 +217,8 @@ def main() -> None:
     training_df, scoring_df = prepare_training_data(feature_jobs_df)
 
     if training_df.empty:
-        raise ValueError("No usable training rows found after salary filtering.")
+        print("No training data available, skipping model step.")
+return
 
     print(f"Training rows count: {len(training_df)}")
     model = train_and_evaluate(training_df)
