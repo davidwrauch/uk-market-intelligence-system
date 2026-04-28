@@ -218,7 +218,7 @@ def main() -> None:
 
     if training_df.empty:
         print("No training data available, skipping model step.")
-return
+        return
 
     print(f"Training rows count: {len(training_df)}")
     model = train_and_evaluate(training_df)
